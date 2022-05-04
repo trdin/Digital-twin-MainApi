@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var wifiSchema = new Schema({
+var facultySchema = new Schema({
 	'name': String,
-	'password': String,
+	'address': String,
 	'location': {
 		type: {
 			type: String,
@@ -21,4 +21,4 @@ var wifiSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('wifi', wifiSchema);
+module.exports = mongoose.model('faculty', facultySchema);

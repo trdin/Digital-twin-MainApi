@@ -1,10 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var wifiSchema = new Schema({
+var eventSchema = new Schema({
 	'name': String,
-	'password': String,
-	'location': {
+	'start': Date,
+	'finish': Date,
+	'address': String,
+	'loaction': {
 		type: {
 			type: String,
 			enum: ['Point'],
@@ -21,4 +23,4 @@ var wifiSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('wifi', wifiSchema);
+module.exports = mongoose.model('event', eventSchema);
