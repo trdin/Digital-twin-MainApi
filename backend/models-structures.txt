@@ -1,0 +1,91 @@
+studentskoDelo{
+    type: String,
+    subType: String,
+    payNET: Number,
+    payGROSS: Number,
+    description: String,
+    lenght: String,
+    workTime: String,
+    company: String,
+    email: String,
+    phone: String,
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    link: String,
+    dataSeries : objectId
+}
+
+//eduroam ki bomo ga zahtevali iz strani edurom 
+//wifije lahko vnasa tudi user pri katerih mora dodati geslo(ce ga omrezje ima)
+wifi {
+    name: String,
+    password: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries : objectId
+}
+
+wifiSpeed{
+    time: Date,
+    wifi: objectId,
+    date_series: objectId
+}
+
+restaurant {
+    name: String
+    surcharge: Number,
+    price: Number
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries: objectId
+}
+
+bar{
+    name: String
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries: objectId
+}
+
+event{
+    name: String
+    start: Date
+    finish: Date
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries: objectId
+}
+
+faculty{
+    name: String
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries: objectId
+}
+
+dorm{
+    name: String
+    address: String,
+    location :{
+        type: "Point",
+        coordinates: [longitude, latitude]
+    }
+    dataSeries: objectId
+}
