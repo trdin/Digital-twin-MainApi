@@ -16,6 +16,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // vključimo routerje
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/userRoutes');
+var dataSeriesRouter = require('./routes/dataSeries');
 
 
 var app = express();
@@ -67,6 +68,7 @@ app.use(function (req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/dataSeries', dataSeriesRouter);
 
 
 // catch 404 and forward to error handler
