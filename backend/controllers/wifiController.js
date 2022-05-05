@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        WifiModel.findOne({_id: id}, function (err, wifi) {
+        WifiModel.findOne({ _id: id }, function (err, wifi) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifi.',
@@ -52,10 +52,13 @@ module.exports = {
      */
     create: function (req, res) {
         var wifi = new WifiModel({
-			name : req.body.name,
-			password : req.body.password,
-			location : req.body.location,
-			dataSeries : req.body.dataSeries
+            name: req.body.name,
+            password: req.body.password,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
+            dataSeries: req.body.dataSeries
         });
 
         wifi.save(function (err, wifi) {
@@ -76,7 +79,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        WifiModel.findOne({_id: id}, function (err, wifi) {
+        WifiModel.findOne({ _id: id }, function (err, wifi) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifi',
@@ -91,10 +94,10 @@ module.exports = {
             }
 
             wifi.name = req.body.name ? req.body.name : wifi.name;
-			wifi.password = req.body.password ? req.body.password : wifi.password;
-			wifi.location = req.body.location ? req.body.location : wifi.location;
-			wifi.dataSeries = req.body.dataSeries ? req.body.dataSeries : wifi.dataSeries;
-			
+            wifi.password = req.body.password ? req.body.password : wifi.password;
+            wifi.location = req.body.location ? req.body.location : wifi.location;
+            wifi.dataSeries = req.body.dataSeries ? req.body.dataSeries : wifi.dataSeries;
+
             wifi.save(function (err, wifi) {
                 if (err) {
                     return res.status(500).json({

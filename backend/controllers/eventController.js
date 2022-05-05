@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        EventModel.findOne({_id: id}, function (err, event) {
+        EventModel.findOne({ _id: id }, function (err, event) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting event.',
@@ -52,12 +52,15 @@ module.exports = {
      */
     create: function (req, res) {
         var event = new EventModel({
-			name : req.body.name,
-			start : req.body.start,
-			finish : req.body.finish,
-			address : req.body.address,
-			loaction : req.body.loaction,
-			dataSeries : req.body.dataSeries
+            name: req.body.name,
+            start: req.body.start,
+            finish: req.body.finish,
+            address: req.body.address,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
+            dataSeries: req.body.dataSeries
         });
 
         event.save(function (err, event) {
@@ -78,7 +81,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        EventModel.findOne({_id: id}, function (err, event) {
+        EventModel.findOne({ _id: id }, function (err, event) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting event',
@@ -93,12 +96,12 @@ module.exports = {
             }
 
             event.name = req.body.name ? req.body.name : event.name;
-			event.start = req.body.start ? req.body.start : event.start;
-			event.finish = req.body.finish ? req.body.finish : event.finish;
-			event.address = req.body.address ? req.body.address : event.address;
-			event.loaction = req.body.loaction ? req.body.loaction : event.loaction;
-			event.dataSeries = req.body.dataSeries ? req.body.dataSeries : event.dataSeries;
-			
+            event.start = req.body.start ? req.body.start : event.start;
+            event.finish = req.body.finish ? req.body.finish : event.finish;
+            event.address = req.body.address ? req.body.address : event.address;
+            event.loaction = req.body.loaction ? req.body.loaction : event.loaction;
+            event.dataSeries = req.body.dataSeries ? req.body.dataSeries : event.dataSeries;
+
             event.save(function (err, event) {
                 if (err) {
                     return res.status(500).json({

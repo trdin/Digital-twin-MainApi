@@ -3,7 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const fetch = require('node-fetch');
+//const fetch = require('node-fetch');
+var schedule = require('node-schedule');
+const update = require('./src/fetch/update');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
@@ -16,7 +18,15 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // vključimo routerje
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/userRoutes');
-var dataSeriesRouter = require('./routes/dataSeries');
+var dataSeriesRouter = require('./routes/dataSeriesRoutes');
+var barRouter = require('./routes/barRoutes');
+var dormRouter = require('./routes/dormRoutes')
+var eventRouter = require('./routes/eventRoutes')
+var facultyRouter = require('./routes/facultyRoutes')
+var restaurantRouter = require('./routes/restaurantRoutes')
+var studentskoDeloRouter = require('./routes/studentskoDeloRoutes')
+var wifiRouter = require('./routes/wifiRoutes')
+var wifiSpeedRouter = require('./routes/wifiSpeedRoutes')
 
 
 var app = express();
@@ -69,7 +79,14 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/dataSeries', dataSeriesRouter);
-
+app.use('/bars', barRouter);
+app.use('/dorms', dormRouter)
+app.use('/events', eventRouter);
+app.use('/faculty', facultyRouter)
+app.use('/restaurants', restaurantRouter)
+app.use('/studentskoDelo', studentskoDeloRouter)
+app.use('/wifi', wifiRouter)
+app.use('/wifiSpeed', wifiSpeedRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -87,5 +104,10 @@ app.use(function (err, req, res, next) {
   //res.render('error');
   res.json(err);
 });
+/*console.log('oskar')
+var j = schedule.scheduleJob('*5 * * * * *', function () {  // this for one hour
+  console.log('this is in ')
+  update.update();
+});*/
 
 module.exports = app;
