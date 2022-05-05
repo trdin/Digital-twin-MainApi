@@ -1,9 +1,9 @@
 var RestaurantModel = require('../models/RestaurantModel.js');
 
 /**
- * restaurant Controller.js
+ * restaurantController.js
  *
- * @description :: Server-side logic for managing restaurant s.
+ * @description :: Server-side logic for managingrestaurants.
  */
 module.exports = {
 
@@ -48,7 +48,7 @@ module.exports = {
     },
 
     /**
-     * restaurant Controller.create()
+     * restaurantController.create()
      */
     create: function (req, res) {
         var restaurant = new RestaurantModel({
@@ -56,7 +56,10 @@ module.exports = {
             surcharge: req.body.surcharge,
             price: req.body.price,
             address: req.body.address,
-            location: req.body.location,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
             dataSeries: req.body.dataSeries
         });
 

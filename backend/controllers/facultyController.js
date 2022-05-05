@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        FacultyModel.findOne({_id: id}, function (err, faculty) {
+        FacultyModel.findOne({ _id: id }, function (err, faculty) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting faculty.',
@@ -52,10 +52,13 @@ module.exports = {
      */
     create: function (req, res) {
         var faculty = new FacultyModel({
-			name : req.body.name,
-			address : req.body.address,
-			location : req.body.location,
-			dataSeries : req.body.dataSeries
+            name: req.body.name,
+            address: req.body.address,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
+            dataSeries: req.body.dataSeries
         });
 
         faculty.save(function (err, faculty) {
@@ -76,7 +79,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        FacultyModel.findOne({_id: id}, function (err, faculty) {
+        FacultyModel.findOne({ _id: id }, function (err, faculty) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting faculty',
@@ -91,10 +94,10 @@ module.exports = {
             }
 
             faculty.name = req.body.name ? req.body.name : faculty.name;
-			faculty.address = req.body.address ? req.body.address : faculty.address;
-			faculty.location = req.body.location ? req.body.location : faculty.location;
-			faculty.dataSeries = req.body.dataSeries ? req.body.dataSeries : faculty.dataSeries;
-			
+            faculty.address = req.body.address ? req.body.address : faculty.address;
+            faculty.location = req.body.location ? req.body.location : faculty.location;
+            faculty.dataSeries = req.body.dataSeries ? req.body.dataSeries : faculty.dataSeries;
+
             faculty.save(function (err, faculty) {
                 if (err) {
                     return res.status(500).json({

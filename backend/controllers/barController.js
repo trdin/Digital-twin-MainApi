@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        BarModel.findOne({_id: id}, function (err, bar) {
+        BarModel.findOne({ _id: id }, function (err, bar) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting bar.',
@@ -52,10 +52,13 @@ module.exports = {
      */
     create: function (req, res) {
         var bar = new BarModel({
-			name : req.body.name,
-			address : req.body.address,
-			loaction : req.body.loaction,
-			dataSeries : req.body.dataSeries
+            name: req.body.name,
+            address: req.body.address,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
+            dataSeries: req.body.dataSeries
         });
 
         bar.save(function (err, bar) {
@@ -76,7 +79,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        BarModel.findOne({_id: id}, function (err, bar) {
+        BarModel.findOne({ _id: id }, function (err, bar) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting bar',
@@ -91,10 +94,10 @@ module.exports = {
             }
 
             bar.name = req.body.name ? req.body.name : bar.name;
-			bar.address = req.body.address ? req.body.address : bar.address;
-			bar.loaction = req.body.loaction ? req.body.loaction : bar.loaction;
-			bar.dataSeries = req.body.dataSeries ? req.body.dataSeries : bar.dataSeries;
-			
+            bar.address = req.body.address ? req.body.address : bar.address;
+            bar.location = req.body.location ? req.body.location : bar.location;
+            bar.dataSeries = req.body.dataSeries ? req.body.dataSeries : bar.dataSeries;
+
             bar.save(function (err, bar) {
                 if (err) {
                     return res.status(500).json({

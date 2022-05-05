@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        DormModel.findOne({_id: id}, function (err, dorm) {
+        DormModel.findOne({ _id: id }, function (err, dorm) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting dorm.',
@@ -52,10 +52,13 @@ module.exports = {
      */
     create: function (req, res) {
         var dorm = new DormModel({
-			name : req.body.name,
-			address : req.body.address,
-			loaction : req.body.loaction,
-			dataSeries : req.body.dataSeries
+            name: req.body.name,
+            address: req.body.address,
+            location: {
+                type: 'Point',
+                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+            },
+            dataSeries: req.body.dataSeries
         });
 
         dorm.save(function (err, dorm) {
@@ -76,7 +79,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        DormModel.findOne({_id: id}, function (err, dorm) {
+        DormModel.findOne({ _id: id }, function (err, dorm) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting dorm',
@@ -91,10 +94,10 @@ module.exports = {
             }
 
             dorm.name = req.body.name ? req.body.name : dorm.name;
-			dorm.address = req.body.address ? req.body.address : dorm.address;
-			dorm.loaction = req.body.loaction ? req.body.loaction : dorm.loaction;
-			dorm.dataSeries = req.body.dataSeries ? req.body.dataSeries : dorm.dataSeries;
-			
+            dorm.address = req.body.address ? req.body.address : dorm.address;
+            dorm.loaction = req.body.loaction ? req.body.loaction : dorm.loaction;
+            dorm.dataSeries = req.body.dataSeries ? req.body.dataSeries : dorm.dataSeries;
+
             dorm.save(function (err, dorm) {
                 if (err) {
                     return res.status(500).json({
