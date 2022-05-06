@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var dormSchema = new Schema({
 	'name': String,
 	'address': String,
-	'loaction': {
+	'location': {
 		type: {
 			type: String,
 			enum: ['Point'],
@@ -12,6 +12,7 @@ var dormSchema = new Schema({
 		},
 		coordinates: {
 			type: [Number],
+			index: "2dsphere",
 			required: true
 		}
 	},

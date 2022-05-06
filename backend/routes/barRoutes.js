@@ -6,6 +6,8 @@ var barController = require('../controllers/barController.js');
  * GET
  */
 router.get('/', barController.list);
+router.get('/distance', barController.getDistance);
+router.get('/near', barController.getNear);
 
 /*
  * GET

@@ -6,6 +6,8 @@ var restaurantController = require('../controllers/restaurantController.js');
  * GET
  */
 router.get('/', restaurantController.list);
+router.get('/distance', restaurantController.getDistance);
+router.get('/near', restaurantController.getNear);
 
 /*
  * GET

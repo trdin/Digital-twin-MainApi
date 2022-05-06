@@ -127,5 +127,57 @@ module.exports = {
 
             return res.status(204).json();
         });
+    },
+    getDistance: function (req, res) {
+        var distance = req.query.distance;
+        var longitude = req.query.lon;
+        var latitude = req.query.lat;
+        console.log(distance, longitude, latitude)
+
+        WifiModel.find({
+            location:
+            {
+                $geoWithin:
+                {
+                    $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
+                }
+            }
+        }).exec(function (err, wifis) {
+            console.log(wifis)
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting wifi .',
+                    error: err
+                });
+            }
+            console.log(wifis)
+            return res.json(wifis);
+        })
+    },
+    getNear: function (req, res) {
+        var longitude = req.query.lon;
+        var latitude = req.query.lat;
+        console.log(longitude, latitude)
+
+        WifiModel.aggregate([{
+            $geoNear: {
+                near: {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                },
+                distanceField: 'distance',
+                spherical: true
+            }
+        }])
+            .exec(function (err, wifis) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting wifis.',
+                        error: err
+                    });
+                }
+                console.log(wifis)
+                return res.json(wifis);
+            })
     }
 };

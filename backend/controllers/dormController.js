@@ -95,7 +95,7 @@ module.exports = {
 
             dorm.name = req.body.name ? req.body.name : dorm.name;
             dorm.address = req.body.address ? req.body.address : dorm.address;
-            dorm.loaction = req.body.loaction ? req.body.loaction : dorm.loaction;
+            dorm.location = req.body.location ? req.body.location : dorm.location;
             dorm.dataSeries = req.body.dataSeries ? req.body.dataSeries : dorm.dataSeries;
 
             dorm.save(function (err, dorm) {

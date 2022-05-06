@@ -6,7 +6,8 @@ var wifiController = require('../controllers/wifiController.js');
  * GET
  */
 router.get('/', wifiController.list);
-
+router.get('/distance', wifiController.getDistance);
+router.get('/near', wifiController.getNear);
 /*
  * GET
  */

@@ -147,5 +147,57 @@ module.exports = {
 
             return res.status(204).json();
         });
+    },
+    getDistance: function (req, res) {
+        var distance = req.query.distance;
+        var longitude = req.query.lon;
+        var latitude = req.query.lat;
+        console.log(distance, longitude, latitude)
+
+        studentWorkModel.find({
+            location:
+            {
+                $geoWithin:
+                {
+                    $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
+                }
+            }
+        }).exec(function (err, studentWorks) {
+            console.log(studentWorks)
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting studentWork .',
+                    error: err
+                });
+            }
+            console.log(studentWorks)
+            return res.json(studentWorks);
+        })
+    },
+    getNear: function (req, res) {
+        var longitude = req.query.lon;
+        var latitude = req.query.lat;
+        console.log(longitude, latitude)
+
+        studentWorkModel.aggregate([{
+            $geoNear: {
+                near: {
+                    type: 'Point',
+                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                },
+                distanceField: 'distance',
+                spherical: true
+            }
+        }])
+            .exec(function (err, studentWorks) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting studentWorks.',
+                        error: err
+                    });
+                }
+                console.log(studentWorks)
+                return res.json(studentWorks);
+            })
     }
 };

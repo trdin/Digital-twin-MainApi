@@ -99,7 +99,7 @@ module.exports = {
             event.start = req.body.start ? req.body.start : event.start;
             event.finish = req.body.finish ? req.body.finish : event.finish;
             event.address = req.body.address ? req.body.address : event.address;
-            event.loaction = req.body.loaction ? req.body.loaction : event.loaction;
+            event.location = req.body.location ? req.body.location : event.location;
             event.dataSeries = req.body.dataSeries ? req.body.dataSeries : event.dataSeries;
 
             event.save(function (err, event) {

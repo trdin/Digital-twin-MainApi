@@ -6,6 +6,8 @@ var studentWorkController = require('../controllers/studentWorkController.js');
  * GET
  */
 router.get('/', studentWorkController.list);
+router.get('/distance', studentWorkController.getDistance);
+router.get('/near', studentWorkController.getNear);
 
 /*
  * GET

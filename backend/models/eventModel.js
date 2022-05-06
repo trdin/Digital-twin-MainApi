@@ -6,7 +6,7 @@ var eventSchema = new Schema({
 	'start': Date,
 	'finish': Date,
 	'address': String,
-	'loaction': {
+	'location': {
 		type: {
 			type: String,
 			enum: ['Point'],
@@ -14,6 +14,7 @@ var eventSchema = new Schema({
 		},
 		coordinates: {
 			type: [Number],
+			index: "2dsphere",
 			required: true
 		}
 	},

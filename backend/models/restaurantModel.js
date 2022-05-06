@@ -14,6 +14,7 @@ var restaurantSchema = new Schema({
 		},
 		coordinates: {
 			type: [Number],
+			index: "2dsphere",
 			required: true
 		}
 	},
