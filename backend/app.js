@@ -24,7 +24,7 @@ var dormRouter = require('./routes/dormRoutes')
 var eventRouter = require('./routes/eventRoutes')
 var facultyRouter = require('./routes/facultyRoutes')
 var restaurantRouter = require('./routes/restaurantRoutes')
-var studentskoDeloRouter = require('./routes/studentskoDeloRoutes')
+var studentWorkRouter = require('./routes/studentWorkRoutes')
 var wifiRouter = require('./routes/wifiRoutes')
 var wifiSpeedRouter = require('./routes/wifiSpeedRoutes')
 
@@ -84,7 +84,7 @@ app.use('/dorms', dormRouter)
 app.use('/events', eventRouter);
 app.use('/faculty', facultyRouter)
 app.use('/restaurants', restaurantRouter)
-app.use('/studentskoDelo', studentskoDeloRouter)
+app.use('/studentWork', studentWorkRouter)
 app.use('/wifi', wifiRouter)
 app.use('/wifiSpeed', wifiSpeedRouter)
 

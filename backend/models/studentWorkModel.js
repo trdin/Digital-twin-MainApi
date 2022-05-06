@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var studentskoDeloSchema = new Schema({
+var studentWorkSchema = new Schema({
 	'type': String,
 	'subType': String,
 	'payNET': Number,
@@ -31,4 +31,4 @@ var studentskoDeloSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('studentskoDelo', studentskoDeloSchema);
+module.exports = mongoose.model('studentWork', studentWorkSchema);
