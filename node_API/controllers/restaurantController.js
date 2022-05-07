@@ -1,4 +1,4 @@
-var RestaurantModel = require('../models/RestaurantModel.js');
+var RestaurantModel = require('../models/restaurantModel.js');
 
 /**
  * restaurantController.js
