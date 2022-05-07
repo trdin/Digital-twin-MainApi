@@ -196,6 +196,7 @@ module.exports = {
             });
         }
     },
+
     jwtAuth: function (req, res, next) {
         const token =
             req.body.token || req.query.token || req.headers["x-access-token"];
@@ -205,10 +206,53 @@ module.exports = {
         }
         try {
             const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+            console.log(decoded)
             req.session.userId = decoded.userId;
         } catch (err) {
             return res.status(401).send("Invalid Token");
         }
-        return next();
-    }
+        UserModel.findOne({ _id: req.session.userId }, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+
+            return res.json(user);
+        });
+    },
+
+    getJwt: function (req, res) {
+        console.log(req.session.userId)
+        UserModel.findOne({ _id: req.session.userId }, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            }
+
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            user.token = token;
+
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating jwt.',
+                        error: err
+                    });
+                }
+
+                return res.json(user);
+            });
+        });
+    },
 };
