@@ -1,4 +1,5 @@
 var UserModel = require('../models/userModel.js');
+const jwt = require("jsonwebtoken");
 
 
 /**
@@ -66,8 +67,26 @@ module.exports = {
                     error: err
                 });
             }
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            user.token = token;
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating user',
+                        error: err
+                    });
+                }
 
-            return res.redirect('/');;
+                return res.status(201).json(user);
+            });
+
         });
     },
 
@@ -143,7 +162,26 @@ module.exports = {
                 return next(err);
             }
             req.session.userId = user._id;
-            res.redirect('/users/profile');
+
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            user.token = token;
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating user',
+                        error: err
+                    });
+                }
+
+                return res.json(user);
+            });
         });
     },
 
@@ -153,11 +191,27 @@ module.exports = {
                 if (err) {
                     return next(err);
                 } else {
-                    return res.redirect('/');
+                    return res.status(201).json({});
                 }
             });
         }
     },
+    jwtAuth: function (req, res, next) {
+        const token =
+            req.body.token || req.query.token || req.headers["x-access-token"];
+
+        if (!token) {
+            return res.status(403).send("A token is required for authentication");
+        }
+        try {
+            const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+            req.session.userId = decoded.userId;
+        } catch (err) {
+            return res.status(401).send("Invalid Token");
+        }
+        return next();
+    }
+
 
 
 };
