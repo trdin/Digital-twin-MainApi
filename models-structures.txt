@@ -1,4 +1,4 @@
-studentskoDelo{
+studentWork{
     type: String,
     subType: String,
     payNET: Number,

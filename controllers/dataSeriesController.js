@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        DataseriesModel.findOne({_id: id}, function (err, dataSeries) {
+        DataseriesModel.findOne({ _id: id }, function (err, dataSeries) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting dataSeries.',
@@ -52,9 +52,12 @@ module.exports = {
      */
     create: function (req, res) {
         var dataSeries = new DataseriesModel({
-			title : req.body.title,
-			tags : req.body.tags,
-			settings : req.body.settings
+            title: req.body.title,
+            tags: req.body.tags,
+            settings: {
+                refresh_rate: parseInt(req.body.refresh_rate),
+                priority: parseInt(req.body.priority)
+            }
         });
 
         dataSeries.save(function (err, dataSeries) {
@@ -75,7 +78,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        DataseriesModel.findOne({_id: id}, function (err, dataSeries) {
+        DataseriesModel.findOne({ _id: id }, function (err, dataSeries) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting dataSeries',
@@ -90,9 +93,9 @@ module.exports = {
             }
 
             dataSeries.title = req.body.title ? req.body.title : dataSeries.title;
-			dataSeries.tags = req.body.tags ? req.body.tags : dataSeries.tags;
-			dataSeries.settings = req.body.settings ? req.body.settings : dataSeries.settings;
-			
+            dataSeries.tags = req.body.tags ? req.body.tags : dataSeries.tags;
+            dataSeries.settings = req.body.settings ? req.body.settings : dataSeries.settings;
+
             dataSeries.save(function (err, dataSeries) {
                 if (err) {
                     return res.status(500).json({

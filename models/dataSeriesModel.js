@@ -8,8 +8,8 @@ var dataSeriesSchema = new Schema({
 	},
 	'tags': Array,
 	'settings': {
-		'refresh_rate': number,
-		'priority': number
+		'refresh_rate': Number,
+		'priority': Number
 	}
 });
 

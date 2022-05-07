@@ -1,25 +1,12 @@
 var UserModel = require('../models/userModel.js');
-var PhotoModel = require('../models/photoModel.js');
-const fetch = require('node-fetch');
+const jwt = require("jsonwebtoken");
+
 
 /**
  * userController.js
  *
  * @description :: Server-side logic for managing users.
  */
-
-async function validateHuman(token) {
-    const secret = process.env.REACT_APP_RECAPTCHA_SECRET_KEY;
-
-    const response = await fetch(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`,
-        {
-            method: "POST",
-        }
-    );
-    const data = await response.json();
-    return data.success;
-}
 module.exports = {
 
     /**
@@ -58,6 +45,7 @@ module.exports = {
                 });
             }
 
+
             return res.json(user);
         });
     },
@@ -65,19 +53,29 @@ module.exports = {
     /**
      * userController.create()
      */
-    create: async function (req, res) {
+    create: function (req, res) {
         var user = new UserModel({
             username: req.body.username,
+            email: req.body.email,
             password: req.body.password,
-            email: req.body.email
         });
-        token = req.body.token
-        const human = await validateHuman(token);
-        if (!human) {
-            return res.status(500).json({
-                message: 'You are a bot',
-            });
-        } else {
+
+        user.save(function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when creating user',
+                    error: err
+                });
+            }
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            user.token = token;
             user.save(function (err, user) {
                 if (err) {
                     return res.status(500).json({
@@ -87,11 +85,9 @@ module.exports = {
                 }
 
                 return res.status(201).json(user);
-                //return res.redirect('/users/login');
             });
-        }
 
-
+        });
     },
 
     /**
@@ -115,8 +111,8 @@ module.exports = {
             }
 
             user.username = req.body.username ? req.body.username : user.username;
-            user.password = req.body.password ? req.body.password : user.password;
             user.email = req.body.email ? req.body.email : user.email;
+            user.password = req.body.password ? req.body.password : user.password;
 
             user.save(function (err, user) {
                 if (err) {
@@ -158,62 +154,35 @@ module.exports = {
     },
 
     login: function (req, res, next) {
+
         UserModel.authenticate(req.body.username, req.body.password, function (err, user) {
             if (err || !user) {
-                var err = new Error('Wrong username or paassword');
+                var err = new Error('Wrong username or password');
                 err.status = 401;
                 return next(err);
             }
             req.session.userId = user._id;
-            //res.redirect('/users/profile');
-            return res.json(user);
-        });
-    },
 
-    profile: function (req, res, next) {
-        UserModel.findById(req.session.userId)
-            .exec(function (error, user) {
-                if (error) {
-                    return next(error);
-                } else {
-                    if (user === null) {
-                        var err = new Error('Not authorized, go back!');
-                        err.status = 400;
-                        return next(err);
-                    } else {
-
-                        PhotoModel.find({ 'postedBy': req.session.userId }).exec(function (err, photos) {
-                            if (error) {
-                                return next(error);
-                            } else {
-                                if (photos === null) {
-                                    var err = new Error('Not authorized, go back!');
-                                    err.status = 400;
-                                    return next(err);
-                                }
-                            }
-                            var photosNum = photos.length;
-                            var likesNum = 0;
-                            photos.forEach(photo => {
-                                likesNum += photo.likes.length;
-                            })
-
-
-                            /*var data = user
-                            data.photosNum = photosNum
-                            data.likes = likesNum*/
-                            data = {
-                                user: user,
-                                photosNum: photosNum,
-                                likesNum: likesNum
-                            }
-                            return res.json(data);
-
-                        })
-
-                    }
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
                 }
+            );
+            user.token = token;
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating user',
+                        error: err
+                    });
+                }
+
+                return res.json(user);
             });
+        });
     },
 
     logout: function (req, res, next) {
@@ -222,11 +191,68 @@ module.exports = {
                 if (err) {
                     return next(err);
                 } else {
-                    //return res.redirect('/');
                     return res.status(201).json({});
                 }
             });
         }
-    }
-};
+    },
 
+    jwtAuth: function (req, res, next) {
+        const token =
+            req.body.token || req.query.token || req.headers["x-access-token"];
+
+        if (!token) {
+            return res.status(403).send("A token is required for authentication");
+        }
+        try {
+            const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+            console.log(decoded)
+            req.session.userId = decoded.userId;
+        } catch (err) {
+            return res.status(401).send("Invalid Token");
+        }
+        UserModel.findOne({ _id: req.session.userId }, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+
+            return res.json(user);
+        });
+    },
+
+    getJwt: function (req, res) {
+        console.log(req.session.userId)
+        UserModel.findOne({ _id: req.session.userId }, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user',
+                    error: err
+                });
+            }
+
+            var email = user.email
+            const token = jwt.sign(
+                { userId: user._id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "5h",
+                }
+            );
+            user.token = token;
+
+            user.save(function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating jwt.',
+                        error: err
+                    });
+                }
+
+                return res.json(user);
+            });
+        });
+    },
+};
