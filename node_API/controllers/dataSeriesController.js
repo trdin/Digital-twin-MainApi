@@ -54,6 +54,7 @@ module.exports = {
         var dataSeries = new DataseriesModel({
             title: req.body.title,
             tags: req.body.tags,
+            lastUpdated: Date.now(),
             settings: {
                 refresh_rate: parseInt(req.body.refresh_rate),
                 priority: parseInt(req.body.priority)
