@@ -106,11 +106,10 @@ app.use(function (err, req, res, next) {
   //res.render('error');
   res.json(err);
 });
-var numb = 0;
-var j = schedule.scheduleJob('*/10 * * * * *', function () {  // this for one hour
+/*console.log('oskar')
+var j = schedule.scheduleJob('*5 * * * * *', function () {  // this for one hour
+  console.log('this is in ')
   update.update();
-  console.log(numb)
-  numb++
-});
+});*/
 
 module.exports = app;
