@@ -7,7 +7,6 @@ var dataSeriesSchema = new Schema({
 		required: true
 	},
 	'tags': Array,
-	'lastUpdated': Date,
 	'settings': {
 		'refresh_rate': Number,
 		'priority': Number
