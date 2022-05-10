@@ -57,7 +57,8 @@ module.exports = {
             settings: {
                 refresh_rate: parseInt(req.body.refresh_rate),
                 priority: parseInt(req.body.priority)
-            }
+            },
+            lastUpdated: Date.now()
         });
 
         dataSeries.save(function (err, dataSeries) {
@@ -95,6 +96,7 @@ module.exports = {
             dataSeries.title = req.body.title ? req.body.title : dataSeries.title;
             dataSeries.tags = req.body.tags ? req.body.tags : dataSeries.tags;
             dataSeries.settings = req.body.settings ? req.body.settings : dataSeries.settings;
+            dataSeries.lastUpdated = req.body.lastUpdated ? new Date(req.body.lastUpdated) : dataSeries.lastUpdated;
 
             dataSeries.save(function (err, dataSeries) {
                 if (err) {
@@ -125,5 +127,5 @@ module.exports = {
 
             return res.status(204).json();
         });
-    }
+    },
 };

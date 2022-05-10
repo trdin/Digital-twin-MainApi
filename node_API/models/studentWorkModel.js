@@ -26,6 +26,7 @@ var studentWorkSchema = new Schema({
 		}
 	},
 	'link': String,
+	'fetchId': String,
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
