@@ -8,6 +8,8 @@ services:
       - '8080:3000'
     links:
       - mongo
+    environment:
+      mongoURL: mongo
   mongo:
     container_name: mongo
     image: mongo
