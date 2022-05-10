@@ -11,7 +11,7 @@ const update = require('./src/fetch/update');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
-var mongoDB = "mongodb://mongo/webapp";
+var mongoDB = "mongodb://" + (process.env.mongoURL || "host.docker.internal") + "/webapp";
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
