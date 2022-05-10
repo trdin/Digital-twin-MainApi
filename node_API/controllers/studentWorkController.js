@@ -54,8 +54,8 @@ module.exports = {
         var studentWork = new studentWorkModel({
             type: req.body.type,
             subType: req.body.subType,
-            payNET: req.body.payNET,
-            payGROSS: req.body.payGROSS,
+            payNET: req.body.payNET == null || req.body.payNET == '' ? 0 : parseFloat(req.body.payNET),
+            payGROSS: req.body.payGROSS == null || req.body.payGROSS == '' ? 0 : parseFloat(req.body.payGROSS),
             descripction: req.body.descripction,
             lenght: req.body.lenght,
             workTime: req.body.workTime,
@@ -63,11 +63,9 @@ module.exports = {
             email: req.body.email,
             phone: req.body.phone,
             address: req.body.address,
-            location: {
-                type: 'Point',
-                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
-            },
+            location: req.body.location,
             link: req.body.link,
+            fetchId: req.body.fetchId,
             dataSeries: req.body.dataSeries
         });
 
@@ -117,6 +115,7 @@ module.exports = {
             studentWork.location = req.body.location ? req.body.location : studentWork.location;
             studentWork.link = req.body.link ? req.body.link : studentWork.link;
             studentWork.dataSeries = req.body.dataSeries ? req.body.dataSeries : studentWork.dataSeries;
+            studentWork.fetchId = req.body.fetchId ? req.body.fetchId : studentWork.fetchId;
 
             studentWork.save(function (err, studentWork) {
                 if (err) {
@@ -199,5 +198,18 @@ module.exports = {
                 console.log(studentWorks)
                 return res.json(studentWorks);
             })
-    }
+    },
+    seriesList: function (req, res) {
+        var id = req.params.id;
+        studentWorkModel.find({ dataSeries: id }, function (err, studentWorks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting studentWork.',
+                    error: err
+                });
+            }
+
+            return res.json(studentWorks);
+        });
+    },
 };

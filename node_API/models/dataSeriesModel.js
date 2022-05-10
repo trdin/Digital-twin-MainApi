@@ -10,7 +10,9 @@ var dataSeriesSchema = new Schema({
 	'settings': {
 		'refresh_rate': Number,
 		'priority': Number
-	}
+	},
+	'lastUpdated': Date
+
 });
 
 module.exports = mongoose.model('dataSeries', dataSeriesSchema);
