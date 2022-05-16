@@ -53,29 +53,29 @@ module.exports = {
     /**
      * userController.create()
      */
-    create: function (req, res) {
+    create: async function (req, res) {
         var user = new UserModel({
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
         });
+        const usernameExists = await UserModel.findOne({ username: user.username });
+        const emailExists = await UserModel.findOne({ email: user.email });
 
-        user.save(function (err, user) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating user',
-                    error: err
-                });
-            }
-            var email = user.email
-            const token = jwt.sign(
-                { userId: user._id, email },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "5h",
-                }
-            );
-            user.token = token;
+        if (usernameExists && emailExists) {
+            return res.status(400).json({
+                message: "Username and email already exists",
+            });
+        } else if (usernameExists) {
+            return res.status(400).json({
+                message: "Username already exists",
+            });
+        } else if (emailExists) {
+            return res.status(400).json({
+                message: "Email already exists",
+            });
+        } else {
+
             user.save(function (err, user) {
                 if (err) {
                     return res.status(500).json({
@@ -83,11 +83,28 @@ module.exports = {
                         error: err
                     });
                 }
+                var email = user.email
+                const token = jwt.sign(
+                    { userId: user._id, email },
+                    process.env.TOKEN_KEY,
+                    {
+                        expiresIn: "5h",
+                    }
+                );
+                user.token = token;
+                user.save(function (err, user) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when creating user',
+                            error: err
+                        });
+                    }
 
-                return res.status(201).json(user);
+                    return res.status(201).json(user);
+                });
+
             });
-
-        });
+        }
     },
 
     /**
