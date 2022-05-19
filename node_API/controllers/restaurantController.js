@@ -159,6 +159,7 @@ module.exports = {
             return res.json(restaurants);
         })
     },
+    
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;

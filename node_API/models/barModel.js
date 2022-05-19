@@ -20,7 +20,7 @@ var barSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
 	},
-	'place_id': String,
+	'place_id': Number,
 	'type' : String
 });
 

@@ -124,7 +124,6 @@ module.exports = {
                     error: err
                 });
             }
-
             return res.status(204).json();
         });
     },

@@ -129,6 +129,7 @@ module.exports = {
             return res.status(204).json();
         });
     },
+    
     getDistance: function (req, res) {
         var distance = req.query.distance;
         var longitude = req.query.lon;
@@ -155,6 +156,7 @@ module.exports = {
             return res.json(bars);
         })
     },
+
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;

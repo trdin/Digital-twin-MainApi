@@ -9,7 +9,6 @@ router.get('/', barController.list);
 router.get('/distance', barController.getDistance);
 router.get('/near', barController.getNear);
 router.get('/seriesList/:id', barController.seriesList);
-
 /*
  * GET
  */

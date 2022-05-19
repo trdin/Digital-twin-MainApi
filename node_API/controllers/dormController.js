@@ -134,7 +134,7 @@ module.exports = {
         DormModel.find({seriesList : id}, function(err, bars){
             if(err){
                 return res.status(500).json({
-                    message: "Error when getting Droms using seriesList",
+                    message: "Error when getting Dormitories using seriesList",
                     error : err
                 });
             }
