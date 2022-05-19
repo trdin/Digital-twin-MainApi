@@ -19,7 +19,9 @@ var barSchema = new Schema({
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
-	}
+	},
+	'place_id': String,
+	'type' : String
 });
 
 module.exports = mongoose.model('bar', barSchema);

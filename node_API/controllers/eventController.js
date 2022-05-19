@@ -1,3 +1,4 @@
+const eventModel = require('../models/eventModel.js');
 var EventModel = require('../models/eventModel.js');
 
 /**
@@ -131,5 +132,18 @@ module.exports = {
 
             return res.status(204).json();
         });
+    },
+
+    seriesList: function(req,res){
+        let id = req.params.id;
+        eventModel.find({seriesList : id}, function(err, bars){
+            if(err){
+                return res.status(500).json({
+                    message: "Error when getting Events using seriesList",
+                    error : err
+                });
+            }
+            return res.json(bars);
+        })
     }
 };
