@@ -216,8 +216,9 @@ module.exports = {
     search: function (req, res) {
         var tag = req.body.search;
         var distance = req.body.distance;
-        var longitude = req.body.lon;
-        var latitude = req.body.lat;
+        var longitude = req.body.longitude;
+        var latitude = req.body.latitude;
+
         if (distance == undefined || distance == '' || distance == 0
             || longitude == 0 || latitude == 0
             || longitude == undefined || latitude == undefined) {
