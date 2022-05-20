@@ -19,6 +19,7 @@ router.get('/:id', studentWorkController.show);
  * POST
  */
 router.post('/', studentWorkController.create);
+router.post('/search', studentWorkController.search)
 
 /*
  * PUT
