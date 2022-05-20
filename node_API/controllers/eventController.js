@@ -58,7 +58,7 @@ module.exports = {
             address: req.body.address,
             location: {
                 type: 'Point',
-                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+                coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
             dataSeries: req.body.dataSeries
         });

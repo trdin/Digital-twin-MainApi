@@ -158,7 +158,7 @@ module.exports = {
             {
                 $geoWithin:
                 {
-                    $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
+                    $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
                 }
             }
         }).exec(function (err, studentWorks) {
@@ -182,7 +182,7 @@ module.exports = {
             $geoNear: {
                 near: {
                     type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                    coordinates: [parseFloat(latitude), parseFloat(longitude)]
                 },
                 distanceField: 'distance',
                 spherical: true

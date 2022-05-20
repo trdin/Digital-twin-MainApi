@@ -56,7 +56,7 @@ module.exports = {
             address: req.body.address,
             location: {
                 type: 'Point',
-                coordinates: [parseFloat(req.body.longitude), parseFloat(req.body.latitude)]
+                coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
             dataSeries: req.body.dataSeries
         });
@@ -139,7 +139,7 @@ module.exports = {
             {
                 $geoWithin:
                 {
-                    $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
+                    $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
                 }
             }
         }).exec(function (err, bars) {
@@ -163,7 +163,7 @@ module.exports = {
             $geoNear: {
                 near: {
                     type: 'Point',
-                    coordinates: [parseFloat(longitude), parseFloat(latitude)]
+                    coordinates: [parseFloat(latitude), parseFloat(longitude)]
                 },
                 distanceField: 'distance',
                 spherical: true
