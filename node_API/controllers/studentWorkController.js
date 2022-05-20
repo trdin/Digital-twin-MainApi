@@ -254,7 +254,6 @@ module.exports = {
                 }
             })
         }
-        console.log(searchConditions);
         studentWorkModel.find(searchConditions).exec(function (err, studentWorks) {
             if (err) {
                 return res.status(500).json({
