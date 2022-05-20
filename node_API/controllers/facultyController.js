@@ -124,8 +124,20 @@ module.exports = {
                     error: err
                 });
             }
-
             return res.status(204).json();
         });
+    },
+
+    seriesList: function(req,res){
+        let id = req.params.id;
+        FacultyModel.find({seriesList : id}, function(err, bars){
+            if(err){
+                return res.status(500).json({
+                    message: "Error when getting Faculties using seriesList",
+                    error : err
+                });
+            }
+            return res.json(bars);
+        })
     }
 };

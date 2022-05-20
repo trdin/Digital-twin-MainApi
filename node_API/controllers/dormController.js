@@ -127,5 +127,18 @@ module.exports = {
 
             return res.status(204).json();
         });
+    },
+
+    seriesList: function(req,res){
+        let id = req.params.id;
+        DormModel.find({seriesList : id}, function(err, bars){
+            if(err){
+                return res.status(500).json({
+                    message: "Error when getting Dormitories using seriesList",
+                    error : err
+                });
+            }
+            return res.json(bars);
+        })
     }
 };
