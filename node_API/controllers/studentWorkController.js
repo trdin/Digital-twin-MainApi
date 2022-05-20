@@ -218,22 +218,18 @@ module.exports = {
         var distance = req.body.distance;
         var longitude = req.body.longitude;
         var latitude = req.body.latitude;
+        var payFrom = req.body.payFrom;
+        var payTo = req.body.payTo;
 
-        if (distance == undefined || distance == '' || distance == 0
-            || longitude == 0 || latitude == 0
-            || longitude == undefined || latitude == undefined) {
-            studentWorkModel.find({ $or: [{ type: { $regex: tag } }, { subType: { $regex: tag } }] }).exec(function (err, studentWorks) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when getting student Works.',
-                        error: err
-                    });
-                }
-
-                return res.json(studentWorks);
-            });
-        } else if (tag == undefined) {
-            studentWorkModel.find({
+        var searchConditions = {
+            $and: [
+                { $or: [{ type: { $regex: tag, $options: 'i' } }, { subType: { $regex: tag, $options: 'i' } }] },
+            ]
+        };
+        if (distance != undefined && distance != '' && distance != 0
+            && longitude != 0 && latitude != 0
+            && longitude != undefined && latitude != undefined) {
+            searchConditions.$and.push({
                 location:
                 {
                     $geoWithin:
@@ -241,41 +237,33 @@ module.exports = {
                         $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
                     }
                 }
-            }).exec(function (err, studentWorks) {
-                console.log(studentWorks)
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when getting studentWork .',
-                        error: err
-                    });
+            });
+        }
+        if (payFrom != undefined && payFrom != '' && !isNaN(payFrom)) {
+            searchConditions.$and.push({
+                payNET: {
+                    $gte: payFrom
                 }
-                console.log(studentWorks)
-                return res.json(studentWorks);
-            })
-        } else {
-            studentWorkModel.find({
-                $and: [
-                    {
-                        location:
-                        {
-                            $geoWithin:
-                            {
-                                $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
-                            }
-                        }
-                    },
-                    { $or: [{ type: { $regex: tag } }, { subType: { $regex: tag } }] }
-                ]
-            }).exec(function (err, studentWorks) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when getting studentWork .',
-                        error: err
-                    });
-                }
-                return res.json(studentWorks);
             })
         }
+        if (payTo != undefined && payTo != '' && !isNaN(payTo)) {
+            console.log(payTo)
+            searchConditions.$and.push({
+                payNET: {
+                    $lte: payTo
+                }
+            })
+        }
+        console.log(searchConditions);
+        studentWorkModel.find(searchConditions).exec(function (err, studentWorks) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting student Works.',
+                    error: err
+                });
+            }
 
+            return res.json(studentWorks);
+        })
     }
 };
