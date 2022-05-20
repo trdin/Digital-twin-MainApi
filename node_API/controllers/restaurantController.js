@@ -159,6 +159,7 @@ module.exports = {
             return res.json(restaurants);
         })
     },
+    
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;
@@ -184,5 +185,18 @@ module.exports = {
                 console.log(restaurants)
                 return res.json(restaurants);
             })
+    },
+
+    seriesList: function(req,res){
+        let id = req.params.id;
+        RestaurantModel.find({seriesList : id}, function(err, bars){
+            if(err){
+                return res.status(500).json({
+                    message: "Error when getting Restaurants using seriesList",
+                    error : err
+                });
+            }
+            return res.json(bars);
+        })
     }
 };

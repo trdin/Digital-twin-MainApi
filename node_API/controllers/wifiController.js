@@ -128,6 +128,7 @@ module.exports = {
             return res.status(204).json();
         });
     },
+    
     getDistance: function (req, res) {
         var distance = req.query.distance;
         var longitude = req.query.lon;
@@ -154,6 +155,7 @@ module.exports = {
             return res.json(wifis);
         })
     },
+
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;
@@ -179,5 +181,18 @@ module.exports = {
                 console.log(wifis)
                 return res.json(wifis);
             })
+    },
+
+    seriesList: function(req,res){
+        let id = req.params.id;
+        WifiModel.find({seriesList : id}, function(err, bars){
+            if(err){
+                return res.status(500).json({
+                    message: "Error when getting Wifi using seriesList",
+                    error : err
+                });
+            }
+            return res.json(bars);
+        })
     }
 };
