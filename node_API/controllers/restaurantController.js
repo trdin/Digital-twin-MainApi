@@ -56,10 +56,12 @@ module.exports = {
             surcharge: req.body.surcharge,
             price: req.body.price,
             address: req.body.address,
+            workTime: req.body.workTime,
             location: {
                 type: 'Point',
                 coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
+            restaurantId : req.body.restaurantId,
             dataSeries: req.body.dataSeries
         });
 
