@@ -29,7 +29,7 @@ module.exports = {
     show: function (req, res) {
         var id = req.params.id;
 
-        WifispeedModel.findOne({_id: id}, function (err, wifiSpeed) {
+        WifispeedModel.findOne({ _id: id }, function (err, wifiSpeed) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifiSpeed.',
@@ -52,9 +52,10 @@ module.exports = {
      */
     create: function (req, res) {
         var wifiSpeed = new WifispeedModel({
-			time : req.body.time,
-			wifi : req.body.wifi,
-			dataSeries : req.body.dataSeries
+            time: req.body.time,
+            speed: req.body.speed,
+            wifi: req.body.wifi,
+            dataSeries: req.body.dataSeries
         });
 
         wifiSpeed.save(function (err, wifiSpeed) {
@@ -75,7 +76,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        WifispeedModel.findOne({_id: id}, function (err, wifiSpeed) {
+        WifispeedModel.findOne({ _id: id }, function (err, wifiSpeed) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifiSpeed',
@@ -90,9 +91,10 @@ module.exports = {
             }
 
             wifiSpeed.time = req.body.time ? req.body.time : wifiSpeed.time;
-			wifiSpeed.wifi = req.body.wifi ? req.body.wifi : wifiSpeed.wifi;
-			wifiSpeed.dataSeries = req.body.dataSeries ? req.body.dataSeries : wifiSpeed.dataSeries;
-			
+            wifiSpeed.speed = req.body.speed ? req.body.speed : wifiSpeed.speed;
+            wifiSpeed.wifi = req.body.wifi ? req.body.wifi : wifiSpeed.wifi;
+            wifiSpeed.dataSeries = req.body.dataSeries ? req.body.dataSeries : wifiSpeed.dataSeries;
+
             wifiSpeed.save(function (err, wifiSpeed) {
                 if (err) {
                     return res.status(500).json({
@@ -123,16 +125,16 @@ module.exports = {
         });
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        WifispeedModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        WifispeedModel.find({ seriesList: id }, function (err, wifis) {
+            if (err) {
                 return res.status(500).json({
                     message: "Error when getting Wifi Speed using seriesList",
-                    error : err
+                    error: err
                 });
             }
-            return res.json(bars);
+            return res.json(wifis);
         })
     }
 };

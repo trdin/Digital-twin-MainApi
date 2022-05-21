@@ -8,6 +8,10 @@ var wifiController = require('../controllers/wifiController.js');
 router.get('/', wifiController.list);
 router.get('/distance', wifiController.getDistance);
 router.get('/near', wifiController.getNear);
+router.get('/seriesList/:id', wifiController.seriesList);
+router.get('/wifiSpeeds', wifiController.getWifiSpeeds);
+
+
 /*
  * GET
  */
@@ -17,6 +21,7 @@ router.get('/:id', wifiController.show);
  * POST
  */
 router.post('/', wifiController.create);
+router.post('/search', wifiController.search)
 
 /*
  * PUT

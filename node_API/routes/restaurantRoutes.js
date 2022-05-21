@@ -8,6 +8,7 @@ var restaurantController = require('../controllers/restaurantController.js');
 router.get('/', restaurantController.list);
 router.get('/distance', restaurantController.getDistance);
 router.get('/near', restaurantController.getNear);
+router.get('/seriesList/:id', restaurantController.seriesList);
 
 /*
  * GET
@@ -18,6 +19,8 @@ router.get('/:id', restaurantController.show);
  * POST
  */
 router.post('/', restaurantController.create);
+router.post('/search', restaurantController.search)
+
 
 /*
  * PUT

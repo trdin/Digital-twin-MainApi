@@ -1,4 +1,5 @@
 var WifiModel = require('../models/wifiModel.js');
+var WifiSpeedModel = require('../models/wifiSpeedModel.js');
 
 /**
  * wifiController.js
@@ -128,7 +129,7 @@ module.exports = {
             return res.status(204).json();
         });
     },
-    
+
     getDistance: function (req, res) {
         var distance = req.query.distance;
         var longitude = req.query.lon;
@@ -144,14 +145,12 @@ module.exports = {
                 }
             }
         }).exec(function (err, wifis) {
-            console.log(wifis)
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifi .',
                     error: err
                 });
             }
-            console.log(wifis)
             return res.json(wifis);
         })
     },
@@ -159,7 +158,6 @@ module.exports = {
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;
-        console.log(longitude, latitude)
 
         WifiModel.aggregate([{
             $geoNear: {
@@ -178,21 +176,88 @@ module.exports = {
                         error: err
                     });
                 }
-                console.log(wifis)
                 return res.json(wifis);
             })
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        WifiModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        WifiModel.find({ seriesList: id }, function (err, wifis) {
+            if (err) {
                 return res.status(500).json({
                     message: "Error when getting Wifi using seriesList",
-                    error : err
+                    error: err
                 });
             }
-            return res.json(bars);
+            return res.json(wifis);
+        })
+    },
+
+    getWifiSpeeds: async function (req, res) {
+        WifiModel.find(async function (err, wifis) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting wifi.',
+                    error: err
+                });
+            }
+            var returnData = []
+            for (let i = 0; i < wifis.length; ++i) {
+                var data = await WifiSpeedModel.find({ wifi: wifis[i].id })
+                var averageSpeed = data.reduce((sum, speed) => sum + parseFloat(speed.speed), 0) / data.length
+                var obj = {
+                    wifi: wifis[i],
+                    speed: averageSpeed
+                }
+                returnData.push(obj)
+            }
+
+            return res.json(returnData);
+        });
+    },
+    search: function (req, res) {
+        var tag = req.body.search;
+        var distance = req.body.distance;
+        var longitude = req.body.longitude;
+        var latitude = req.body.latitude;
+
+        var searchConditions = {
+            $and: [
+                { name: { $regex: tag, $options: 'i' } },
+            ]
+        };
+        if (distance != undefined && distance != '' && distance != 0
+            && longitude != 0 && latitude != 0
+            && longitude != undefined && latitude != undefined) {
+            searchConditions.$and.push({
+                location:
+                {
+                    $geoWithin:
+                    {
+                        $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
+                    }
+                }
+            });
+        }
+        WifiModel.find(searchConditions).exec(async function (err, wifis) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting wifis.',
+                    error: err
+                });
+            }
+            var returnData = []
+            for (let i = 0; i < wifis.length; ++i) {
+                var data = await WifiSpeedModel.find({ wifi: wifis[i].id })
+                var averageSpeed = data.reduce((sum, speed) => sum + parseFloat(speed.speed), 0) / data.length
+                var obj = {
+                    wifi: wifis[i],
+                    speed: averageSpeed
+                }
+                returnData.push(obj)
+            }
+
+            return res.json(returnData);
         })
     }
 };

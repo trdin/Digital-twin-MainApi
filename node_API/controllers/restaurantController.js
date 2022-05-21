@@ -159,7 +159,7 @@ module.exports = {
             return res.json(restaurants);
         })
     },
-    
+
     getNear: function (req, res) {
         var longitude = req.query.lon;
         var latitude = req.query.lat;
@@ -187,16 +187,52 @@ module.exports = {
             })
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        RestaurantModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        RestaurantModel.find({ seriesList: id }, function (err, restaurants) {
+            if (err) {
                 return res.status(500).json({
                     message: "Error when getting Restaurants using seriesList",
-                    error : err
+                    error: err
                 });
             }
-            return res.json(bars);
+            return res.json(restaurants);
+        })
+    },
+    search: function (req, res) {
+        var tag = req.body.search;
+        var distance = req.body.distance;
+        var longitude = req.body.longitude;
+        var latitude = req.body.latitude;
+
+        var searchConditions = {
+            $and: [
+                { name: { $regex: tag, $options: 'i' } },
+            ]
+        };
+        if (distance != undefined && distance != '' && distance != 0
+            && longitude != 0 && latitude != 0
+            && longitude != undefined && latitude != undefined) {
+            searchConditions.$and.push({
+                location:
+                {
+                    $geoWithin:
+                    {
+                        $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
+                    }
+                }
+            });
+        }
+        RestaurantModel.find(searchConditions).exec(function (err, restaurants) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting restaurants.',
+                    error: err
+                });
+            }
+            console.log(restaurants)
+
+            return res.json(restaurants);
         })
     }
 };

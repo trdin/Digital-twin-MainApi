@@ -129,16 +129,16 @@ module.exports = {
         });
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        DormModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        DormModel.find({ seriesList: id }, function (err, dorms) {
+            if (err) {
                 return res.status(500).json({
-                    message: "Error when getting Dormitories using seriesList",
-                    error : err
+                    message: "Error when getting Dorms using seriesList",
+                    error: err
                 });
             }
-            return res.json(bars);
+            return res.json(dorms);
         })
     }
 };

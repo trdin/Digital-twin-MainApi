@@ -6,6 +6,7 @@ var wifiSpeedController = require('../controllers/wifiSpeedController.js');
  * GET
  */
 router.get('/', wifiSpeedController.list);
+router.get('/seriesList/:id', wifiSpeedController.seriesList);
 
 /*
  * GET
