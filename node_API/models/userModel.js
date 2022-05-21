@@ -11,7 +11,7 @@ var userSchema = new Schema({
 	},
 	'token': { type: String },
 });
-
+/*
 userSchema.pre('save', function (next) {
 	var user = this;
 	bcrypt.hash(user.password, 10, function (err, hash) {
@@ -21,9 +21,10 @@ userSchema.pre('save', function (next) {
 		user.password = hash;
 		next();
 	});
-});
+});*/
 
 userSchema.statics.authenticate = function (username, password, callback) {
+	console.log('authenticate', username, password)
 	User.findOne({ username: username })
 		.exec(function (err, user) {
 			if (err) {
@@ -34,6 +35,7 @@ userSchema.statics.authenticate = function (username, password, callback) {
 				return callback(err);
 			}
 			bcrypt.compare(password, user.password, function (err, result) {
+				console.log(err)
 				if (result === true) {
 					return callback(null, user);
 				} else {

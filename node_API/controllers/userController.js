@@ -1,5 +1,6 @@
 var UserModel = require('../models/userModel.js');
 const jwt = require("jsonwebtoken");
+var bcrypt = require('bcrypt');
 
 
 /**
@@ -76,22 +77,11 @@ module.exports = {
             });
         } else {
 
-            user.save(function (err, user) {
+            bcrypt.hash(user.password, 10, function (err, hash) {
                 if (err) {
-                    return res.status(500).json({
-                        message: 'Error when creating user',
-                        error: err
-                    });
+                    return next(err);
                 }
-                var email = user.email
-                const token = jwt.sign(
-                    { userId: user._id, email },
-                    process.env.TOKEN_KEY,
-                    {
-                        expiresIn: "5h",
-                    }
-                );
-                user.token = token;
+                user.password = hash;
                 user.save(function (err, user) {
                     if (err) {
                         return res.status(500).json({
@@ -99,11 +89,30 @@ module.exports = {
                             error: err
                         });
                     }
+                    var email = user.email
+                    const token = jwt.sign(
+                        { userId: user._id, email },
+                        process.env.TOKEN_KEY,
+                        {
+                            expiresIn: "5h",
+                        }
+                    );
+                    user.token = token;
+                    user.save(function (err, user) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when creating user',
+                                error: err
+                            });
+                        }
 
-                    return res.status(201).json(user);
+                        return res.status(201).json(user);
+                    });
+
                 });
-
             });
+
+
         }
     },
 

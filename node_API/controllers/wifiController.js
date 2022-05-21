@@ -27,10 +27,10 @@ module.exports = {
     /**
      * wifiController.show()
      */
-    show: function (req, res) {
+    show: async function (req, res) {
         var id = req.params.id;
 
-        WifiModel.findOne({ _id: id }, function (err, wifi) {
+        WifiModel.findOne({ _id: id }, async function (err, wifi) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting wifi.',
@@ -44,7 +44,22 @@ module.exports = {
                 });
             }
 
-            return res.json(wifi);
+
+            var data = await WifiSpeedModel.find({ wifi: wifi.id })
+            var averageSpeed = data.reduce((sum, speed) => sum + parseFloat(speed.speed), 0) / data.length
+            WifiSpeedModel.find({ wifi: wifi.id }).exec(function (err, wifiSpeeds) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting wifi.',
+                        error: err
+                    });
+                }
+                return res.json({
+                    wifi: wifi,
+                    speed: averageSpeed,
+                    wifiSpeeds: wifiSpeeds
+                });
+            })
         });
     },
 
