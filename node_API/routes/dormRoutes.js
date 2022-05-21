@@ -6,6 +6,7 @@ var dormController = require('../controllers/dormController.js');
  * GET
  */
 router.get('/', dormController.list);
+router.get('/seriesList/:id', dormController.seriesList);
 
 /*
  * GET

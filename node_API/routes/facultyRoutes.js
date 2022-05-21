@@ -6,6 +6,7 @@ var facultyController = require('../controllers/facultyController.js');
  * GET
  */
 router.get('/', facultyController.list);
+router.get('/seriesList/:id', facultyController.seriesList);
 
 /*
  * GET

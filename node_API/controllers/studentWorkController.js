@@ -234,7 +234,7 @@ module.exports = {
                 {
                     $geoWithin:
                     {
-                        $centerSphere: [[parseFloat(longitude), parseFloat(latitude)], parseFloat(distance) / 6378.15214]
+                        $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
                     }
                 }
             });

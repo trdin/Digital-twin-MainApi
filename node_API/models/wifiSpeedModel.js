@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var wifiSpeedSchema = new Schema({
 	'time': Date,
+	'speed': Number,
 	'wifi': {
 		type: Schema.Types.ObjectId,
 		ref: 'wifi'

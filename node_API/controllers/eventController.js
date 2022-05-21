@@ -12,7 +12,7 @@ module.exports = {
      * eventController.list()
      */
     list: function (req, res) {
-        EventModel.find(function (err, events) {
+        EventModel.find().sort({ start: 1 }).exec(function (err, events) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting event.',
@@ -54,8 +54,8 @@ module.exports = {
     create: function (req, res) {
         var event = new EventModel({
             name: req.body.name,
-            start: req.body.start,
-            finish: req.body.finish,
+            start: Date.parse(req.body.start),
+            finish: Date.parse(req.body.finish),
             address: req.body.address,
             location: {
                 type: 'Point',
@@ -133,16 +133,51 @@ module.exports = {
         });
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        eventModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        EventModel.find({ seriesList: id }, function (err, events) {
+            if (err) {
                 return res.status(500).json({
                     message: "Error when getting Events using seriesList",
-                    error : err
+                    error: err
                 });
             }
-            return res.json(bars);
+            return res.json(events);
+        })
+    },
+    search: function (req, res) {
+        var tag = req.body.search;
+        var distance = req.body.distance;
+        var longitude = req.body.longitude;
+        var latitude = req.body.latitude;
+
+        var searchConditions = {
+            $and: [
+                { name: { $regex: tag, $options: 'i' } },
+            ]
+        };
+        if (distance != undefined && distance != '' && distance != 0
+            && longitude != 0 && latitude != 0
+            && longitude != undefined && latitude != undefined) {
+            searchConditions.$and.push({
+                location:
+                {
+                    $geoWithin:
+                    {
+                        $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
+                    }
+                }
+            });
+        }
+        EventModel.find(searchConditions).sort({ start: 1 }).exec(function (err, events) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting bars.',
+                    error: err
+                });
+            }
+
+            return res.json(events);
         })
     }
 };

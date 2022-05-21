@@ -18,6 +18,7 @@ router.get('/:id', barController.show);
  * POST
  */
 router.post('/', barController.create);
+router.post('/search', barController.search)
 
 /*
  * PUT

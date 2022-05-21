@@ -129,7 +129,7 @@ module.exports = {
             return res.status(204).json();
         });
     },
-    
+
     getDistance: function (req, res) {
         var distance = req.query.distance;
         var longitude = req.query.lon;
@@ -183,13 +183,48 @@ module.exports = {
             })
     },
 
-    seriesList: function(req,res){
+    seriesList: function (req, res) {
         let id = req.params.id;
-        barModel.find({seriesList : id}, function(err, bars){
-            if(err){
+        barModel.find({ seriesList: id }, function (err, bars) {
+            if (err) {
                 return res.status(500).json({
                     message: "Error when getting bars using seriesList",
-                    error : err
+                    error: err
+                });
+            }
+
+            return res.json(bars);
+        })
+    },
+    search: function (req, res) {
+        var tag = req.body.search;
+        var distance = req.body.distance;
+        var longitude = req.body.longitude;
+        var latitude = req.body.latitude;
+
+        var searchConditions = {
+            $and: [
+                { name: { $regex: tag, $options: 'i' } },
+            ]
+        };
+        if (distance != undefined && distance != '' && distance != 0
+            && longitude != 0 && latitude != 0
+            && longitude != undefined && latitude != undefined) {
+            searchConditions.$and.push({
+                location:
+                {
+                    $geoWithin:
+                    {
+                        $centerSphere: [[parseFloat(latitude), parseFloat(longitude)], parseFloat(distance) / 6378.15214]
+                    }
+                }
+            });
+        }
+        BarModel.find(searchConditions).exec(function (err, bars) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting bars.',
+                    error: err
                 });
             }
 
