@@ -70,13 +70,14 @@ module.exports = {
         });
 
         studentWork.save(function (err, studentWork) {
+            
             if (err) {
                 return res.status(500).json({
                     message: 'Error when creating studentWork',
                     error: err
                 });
             }
-
+            console.log("Creation of student work")
             return res.status(201).json(studentWork);
         });
     },

@@ -55,6 +55,8 @@ module.exports = {
         var bar = new BarModel({
             name: req.body.name,
             address: req.body.address,
+            type: req.body.type,
+            place_id : req.body.place_id,
             location: {
                 type: 'Point',
                 coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
@@ -63,6 +65,7 @@ module.exports = {
         });
 
         bar.save(function (err, bar) {
+            
             if (err) {
                 return res.status(500).json({
                     message: 'Error when creating bar',
