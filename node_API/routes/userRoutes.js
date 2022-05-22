@@ -15,7 +15,7 @@ function requiresLogin(req, res, next) {
 router.get('/', userController.list);
 //router.get('/register', userController.showRegister);
 //router.get('/login', userController.showLogin);
-//router.get('/profile', userController.profile);
+router.get('/profile', userController.profile);
 router.get('/logout', userController.logout);
 router.get('/getjwt', requiresLogin, userController.getJwt);
 router.get('/:id', userController.show);
