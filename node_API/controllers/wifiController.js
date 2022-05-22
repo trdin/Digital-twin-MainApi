@@ -1,6 +1,6 @@
 var WifiModel = require('../models/wifiModel.js');
 var WifiSpeedModel = require('../models/wifiSpeedModel.js');
-
+var DataseriesModel = require('../models/dataSeriesModel.js');
 /**
  * wifiController.js
  *
@@ -56,7 +56,7 @@ module.exports = {
                 }
                 return res.json({
                     wifi: wifi,
-                    speed: averageSpeed,
+                    speed: averageSpeed.toFixed(2),
                     wifiSpeeds: wifiSpeeds
                 });
             })
@@ -76,17 +76,48 @@ module.exports = {
             },
             dataSeries: req.body.dataSeries
         });
+        if (wifi.dataSeries == undefined) {
+            DataseriesModel.find({ title: req.body.dataSeriesTitle }, function (err, dataSeries) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Cant get Dataseries',
+                        error: err
+                    });
+                }
 
-        wifi.save(function (err, wifi) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating wifi',
-                    error: err
+                if (!dataSeries) {
+                    return res.status(404).json({
+                        message: 'No such dataSeries'
+                    });
+                }
+
+
+                wifi.dataSeries = dataSeries._id
+
+                wifi.save(function (err, wifi) {
+                    if (err) {
+                        return res.status(500).json({
+                            message: 'Error when creating wifi',
+                            error: err
+                        });
+                    }
+
+                    return res.status(201).json(wifi);
                 });
-            }
+            })
+        } else {
+            wifi.save(function (err, wifi) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating wifi',
+                        error: err
+                    });
+                }
 
-            return res.status(201).json(wifi);
-        });
+                return res.status(201).json(wifi);
+            });
+        }
+
     },
 
     /**
@@ -267,12 +298,12 @@ module.exports = {
                 var averageSpeed = data.reduce((sum, speed) => sum + parseFloat(speed.speed), 0) / data.length
                 var obj = {
                     wifi: wifis[i],
-                    speed: averageSpeed
+                    speed: averageSpeed.toFixed(2)
                 }
                 returnData.push(obj)
             }
 
             return res.json(returnData);
         })
-    }
+    },
 };

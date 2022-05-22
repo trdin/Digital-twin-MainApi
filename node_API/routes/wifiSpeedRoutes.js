@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var wifiSpeedController = require('../controllers/wifiSpeedController.js');
 
+function requiresLogin(req, res, next) {
+    if (req.session && req.session.userId) {
+        return next();
+    } else {
+        var err = new Error("You must be logged in to view this page");
+        err.status = 401;
+        return next(err);
+    }
+}
 /*
  * GET
  */
@@ -16,7 +25,7 @@ router.get('/:id', wifiSpeedController.show);
 /*
  * POST
  */
-router.post('/', wifiSpeedController.create);
+router.post('/', requiresLogin, wifiSpeedController.create);
 
 /*
  * PUT
