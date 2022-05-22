@@ -1,5 +1,5 @@
 var WifispeedModel = require('../models/wifiSpeedModel.js');
-
+var DataseriesModel = require('../models/dataSeriesModel.js');
 /**
  * wifiSpeedController.js
  *
@@ -52,22 +52,33 @@ module.exports = {
      */
     create: function (req, res) {
         var wifiSpeed = new WifispeedModel({
-            time: req.body.time,
+            time: Date.now(),
             speed: req.body.speed,
             wifi: req.body.wifi,
-            dataSeries: req.body.dataSeries
         });
 
-        wifiSpeed.save(function (err, wifiSpeed) {
+        DataseriesModel.find({ title: req.body.dataSeriesTitle }, function (err, dataSeries) {
             if (err) {
                 return res.status(500).json({
-                    message: 'Error when creating wifiSpeed',
+                    message: 'Cant get Dataseries',
                     error: err
                 });
             }
+            wifiSpeed.dataSeries = dataSeries._id
 
-            return res.status(201).json(wifiSpeed);
-        });
+            wifiSpeed.save(function (err, wifiSpeed) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when creating wifiSpeed',
+                        error: err
+                    });
+                }
+
+                return res.status(201).json(wifiSpeed);
+            });
+        })
+
+
     },
 
     /**
