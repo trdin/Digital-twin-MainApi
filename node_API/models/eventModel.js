@@ -2,11 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var eventSchema = new Schema({
-	'title': String,
-	'content': String,
+	'name': String,
 	'start': Date,
+	'finish': Date,
 	'address': String,
-	'url' : String,
 	'location': {
 		type: {
 			type: String,
@@ -22,8 +21,7 @@ var eventSchema = new Schema({
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
-	},
-	'eventId' : String
+	}
 });
 
 module.exports = mongoose.model('event', eventSchema);
