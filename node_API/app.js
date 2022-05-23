@@ -33,8 +33,8 @@ var wifiSpeedRouter = require('./routes/wifiSpeedRoutes')
 
 var app = express();
 
-var cors = require('cors');
-app.use(cors());
+// var cors = require('cors');
+// app.use(cors());
 // var allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
 // app.use(cors({
 //   credentials: true,
