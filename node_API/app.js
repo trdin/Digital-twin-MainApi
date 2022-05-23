@@ -36,8 +36,9 @@ var app = express();
 var cors = require('cors');
 app.use(cors({
   credentials: true,
-  origin: '*',
-  methods: "GET,PUT,POST,DELETE"
+  origin: function (origin, callback) {
+    return callback(null, true);
+  }
 }));
 
 // view engine setup
