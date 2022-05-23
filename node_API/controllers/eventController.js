@@ -53,17 +53,14 @@ module.exports = {
      */
     create: function (req, res) {
         var event = new EventModel({
-            title: req.body.title,
-            content: req.body.content,
-            start: req.body.start == null ? Date.now() : Date.parse(req.body.start),
-            //finish: Date.parse(req.body.finish),
+            name: req.body.name,
+            start: Date.parse(req.body.start),
+            finish: Date.parse(req.body.finish),
             address: req.body.address,
-            url : req.body.url,
             location: {
                 type: 'Point',
                 coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
-            eventId: req.body.eventId,
             dataSeries: req.body.dataSeries
         });
 
