@@ -85,7 +85,7 @@ app.use('/dataSeries', dataSeriesRouter);
 app.use('/bars', barRouter);
 app.use('/dorms', dormRouter)
 app.use('/events', eventRouter);
-app.use('/faculty', facultyRouter)
+app.use('/faculties', facultyRouter)
 app.use('/restaurants', restaurantRouter)
 app.use('/studentWork', studentWorkRouter)
 app.use('/wifi', wifiRouter)
