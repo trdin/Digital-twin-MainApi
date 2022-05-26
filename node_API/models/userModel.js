@@ -47,15 +47,25 @@ userSchema.statics.authenticate = function (username, password, callback) {
 		});
 }
 
+
 var User = mongoose.model('user', userSchema);
 
-bcrypt.hash((process.env.adminPassword || 'admin'), 10, function (err, hash) {
-	var admin = new User({ username: 'admin', email: 'nomail', password: hash, admin: true })
+//Create admin user if not in db
+User.findOne(function (err, result) {
+	if (err) console.error(err);
+	if (!result) {
+		bcrypt.hash((process.env.adminPassword || 'admin'), 10, function (err, hash) {
+			var admin = new User({ username: 'admin', email: 'nomail', password: hash, admin: true })
 
-	admin.save(function (err, admin) {
-		if (err) return console.error(err);
-		console.log("Admin user created.")
-	})
+			admin.save(function (err, admin) {
+				if (err) return console.error(err);
+				console.log("Admin user created.")
+			})
+		})
+	}
+	if (result) {
+		console.log("Admin user already exists in databese, not creating another");
+	}
 })
 
 module.exports = User;

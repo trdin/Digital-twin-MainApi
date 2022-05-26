@@ -11,8 +11,10 @@ const update = require('./src/fetch/update');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
-var mongoDB = "mongodb://" + (process.env.mongoURL || "host.docker.internal") + "/webapp";
-mongoose.connect(mongoDB);
+if (process.env.mongoURL && !process.env.mongoURL.includes(".mongodb.net"))
+  process.env.mongoURL = "mongodb://" + process.env.mongoURL + "/webapp"
+var mongoDB = (process.env.mongoURL || "mongodb://host.docker.internal/webapp");
+mongoose.connect(mongoDB, err => { if (err) console.log(err); });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

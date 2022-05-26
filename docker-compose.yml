@@ -1,7 +1,8 @@
 version: '3.8'
 services:
   node:
-    container_name: docker-node
+    container_name: main_api_nodejs
+    image: smltg/main_api_nodejs
     restart: always
     build: node_API/
     ports:
@@ -9,7 +10,7 @@ services:
     links:
       - mongo
     environment:
-      mongoURL: mongo
+      mongoURL: mongo 
   mongo:
     container_name: mongo
     image: mongo
