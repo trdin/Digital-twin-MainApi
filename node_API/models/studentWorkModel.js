@@ -6,7 +6,7 @@ var studentWorkSchema = new Schema({
 	'subType': String,
 	'payNET': Number,
 	'payGROSS': Number,
-	'descripction': String,
+	'description': String,
 	'lenght': String,
 	'workTime': String,
 	'company': String,
