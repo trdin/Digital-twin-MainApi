@@ -56,14 +56,17 @@ module.exports = {
             subType: req.body.subType,
             payNET: req.body.payNET == null || req.body.payNET == '' ? 0 : parseFloat(req.body.payNET),
             payGROSS: req.body.payGROSS == null || req.body.payGROSS == '' ? 0 : parseFloat(req.body.payGROSS),
-            descripction: req.body.descripction,
+            description: req.body.description,
             lenght: req.body.lenght,
             workTime: req.body.workTime,
             company: req.body.company,
             email: req.body.email,
             phone: req.body.phone,
             address: req.body.address,
-            location: req.body.location,
+            location: {
+                type: 'Point',
+                coordinates: [req.body.latitude == null ? 0 : parseFloat(req.body.latitude), req.body.latitude == null ? 0 :  parseFloat(req.body.longitude)]
+            },
             link: req.body.link,
             fetchId: req.body.fetchId,
             dataSeries: req.body.dataSeries
@@ -77,7 +80,7 @@ module.exports = {
                     error: err
                 });
             }
-            console.log("Creation of student work")
+            
             return res.status(201).json(studentWork);
         });
     },
