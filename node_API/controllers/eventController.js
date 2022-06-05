@@ -55,8 +55,8 @@ module.exports = {
         var event = new EventModel({
             title: req.body.title,
             content: req.body.content,
-            start: req.body.start == null ? Date.now() : Date.parse(req.body.start),
-            //finish: Date.parse(req.body.finish),
+            start: req.body.start,
+            end: req.body.end,
             address: req.body.address,
             url : req.body.url,
             location: {
