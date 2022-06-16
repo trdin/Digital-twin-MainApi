@@ -74,7 +74,8 @@ module.exports = {
                 type: 'Point',
                 coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
-            dataSeries: req.body.dataSeries
+            dataSeries: req.body.dataSeries,
+            wifiId : req.body.wifiId
         });
         if (wifi.dataSeries == undefined) {
             DataseriesModel.find({ title: req.body.dataSeriesTitle }, function (err, dataSeries) {

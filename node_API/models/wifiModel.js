@@ -19,7 +19,8 @@ var wifiSchema = new Schema({
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
-	}
+	},
+	'wifiId' : String
 });
 
 module.exports = mongoose.model('wifi', wifiSchema);
