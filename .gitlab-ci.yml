@@ -11,7 +11,8 @@ stages:
 docker-build:
   stage: build
   script:
-  - docker build -f node_API/Dockerfile --iidfile imageid.txt -t registry.heroku.com/smltg/main-api .
+  - cd node_API
+  - docker build --iidfile imageid.txt -t registry.heroku.com/smltg/main-api .
   - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
   - docker push registry.heroku.com/smltg/main-api
   - apk add --no-cache curl
