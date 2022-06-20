@@ -12,10 +12,9 @@ docker-build:
   stage: build
   script:
   - cd node_API
-  - docker build --iidfile imageid.txt -t registry.heroku.com/smltg/main-api .
+  - docker build --iidfile imageid.txt -t registry.heroku.com/smltg-backend/web .
   - docker login -u oskar.dolenc@student.um.si -p $HEROKU_AUTH_KEY registry.heroku.com
-  - heroku container:login
-  - docker push registry.heroku.com/smltg/main-api
+  - docker push registry.heroku.com/smltg-backend/web
   - apk add --no-cache curl
   - echo "Docker Image ID is $(cat imageid.txt)"
   - |-
