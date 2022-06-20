@@ -13,7 +13,7 @@ docker-build:
   script:
   - cd node_API
   - docker build --iidfile imageid.txt -t registry.heroku.com/smltg/main-api .
-  - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+  - docker login -u oskar.dolenc@student.um.si -p $HEROKU_TOKEN registry.heroku.com
   - docker push registry.heroku.com/smltg/main-api
   - apk add --no-cache curl
   - echo "Docker Image ID is $(cat imageid.txt)"
