@@ -31,6 +31,7 @@ var restaurantRouter = require('./routes/restaurantRoutes')
 var studentWorkRouter = require('./routes/studentWorkRoutes')
 var wifiRouter = require('./routes/wifiRoutes')
 var wifiSpeedRouter = require('./routes/wifiSpeedRoutes')
+var messageRouter = require('./routes/messageRoutes');
 
 
 var app = express();
@@ -84,6 +85,8 @@ app.use('/restaurants', restaurantRouter)
 app.use('/studentWork', studentWorkRouter)
 app.use('/wifi', wifiRouter)
 app.use('/wifiSpeed', wifiSpeedRouter)
+app.use('/messages', messageRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
