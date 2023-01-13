@@ -53,6 +53,7 @@ module.exports = {
     create: function (req, res) {
         var message = new messageModel({
             content: req.body.content,
+            category: req.body.category,
             time: new Date(req.body.time),
             location: {
                 type: 'Point',
@@ -94,6 +95,7 @@ module.exports = {
             }
 
             message.content = req.body.content ? req.body.content : message.content;
+            message.category = req.body.category ? req.body.category : message.category;
             message.time = req.body.time ? req.body.time : message.time;
             message.location = req.body.location ? req.body.location : message.location;
 
