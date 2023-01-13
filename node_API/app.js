@@ -32,6 +32,7 @@ var studentWorkRouter = require('./routes/studentWorkRoutes')
 var wifiRouter = require('./routes/wifiRoutes')
 var wifiSpeedRouter = require('./routes/wifiSpeedRoutes')
 var messageRouter = require('./routes/messageRoutes');
+var imageRouter = require('./routes/imageRoutes');
 
 
 var app = express();
@@ -86,6 +87,7 @@ app.use('/studentWork', studentWorkRouter)
 app.use('/wifi', wifiRouter)
 app.use('/wifiSpeed', wifiSpeedRouter)
 app.use('/messages', messageRouter);
+app.use('/images', imageRouter);
 
 
 // catch 404 and forward to error handler

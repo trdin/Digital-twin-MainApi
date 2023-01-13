@@ -7,6 +7,7 @@ var restaurantSchema = new Schema({
 	'price': Number,
 	'address': String,
 	'workTime': String,
+	'restaurantId': String,
 	'location': {
 		type: {
 			type: String,
@@ -22,8 +23,7 @@ var restaurantSchema = new Schema({
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
-	},
-	'restaurantId': String
+	}
 });
 
 module.exports = mongoose.model('restaurants', restaurantSchema);

@@ -13,6 +13,8 @@ var studentWorkSchema = new Schema({
 	'email': String,
 	'phone': String,
 	'address': String,
+	'link': String,
+	'fetchId': String,
 	'location': {
 		type: {
 			type: String,
@@ -25,8 +27,6 @@ var studentWorkSchema = new Schema({
 			required: true
 		}
 	},
-	'link': String,
-	'fetchId': String,
 	'dataSeries': {
 		type: Schema.Types.ObjectId,
 		ref: 'dataSeries'
