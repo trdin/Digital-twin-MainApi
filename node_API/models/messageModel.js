@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var messageSchema = new Schema({
 	'content': String,
+	'category' : String,
 	'time': Date,
 	'location': {
 		type: {
