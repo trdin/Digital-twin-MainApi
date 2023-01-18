@@ -6,6 +6,17 @@ var logger = require('morgan');
 require("dotenv").config();
 //console.log(process.env)
 //const fetch = require('node-fetch');
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// const upload = multer({ storage: storage });
+const upload = multer();
 var schedule = require('node-schedule');
 const update = require('./src/fetch/update');
 
@@ -87,7 +98,15 @@ app.use('/studentWork', studentWorkRouter)
 app.use('/wifi', wifiRouter)
 app.use('/wifiSpeed', wifiSpeedRouter)
 app.use('/messages', messageRouter);
-app.use('/images', imageRouter);
+//app.use('/images', imageRouter);
+
+app.post('/images', upload.single('image'), (req, res) => {
+  // req.body contains the form data
+  console.log(req.body);
+  console.log(req.file);
+  // do something with the form data
+  res.send('Form data received!');
+});
 
 
 // catch 404 and forward to error handler

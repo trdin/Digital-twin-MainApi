@@ -26,6 +26,7 @@ router.put('/:id', messageController.update);
 /*
  * DELETE
  */
+router.delete('/deleteall', messageController.removeall);
 router.delete('/:id', messageController.remove);
 
 module.exports = router;

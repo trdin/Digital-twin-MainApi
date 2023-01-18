@@ -51,8 +51,9 @@ module.exports = {
      * imageController.create()
      */
     create: function (req, res) {
+	console.log(req);
         var image = new imageModel({
-            
+           
             people: req.body.people,
             time: new Date(req.body.time),
             location: {
@@ -60,10 +61,14 @@ module.exports = {
                 coordinates: [parseFloat(req.body.latitude), parseFloat(req.body.longitude)]
             },
         });
+	console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	console.log(image);
 
         image.save(function (err, message) {
 
             if (err) {
+		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		console.log(err);
                 return res.status(500).json({
                     message: 'Error when creating message',
                     error: err

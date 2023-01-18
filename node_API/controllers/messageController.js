@@ -130,6 +130,24 @@ module.exports = {
         });
     },
 
+    /**
+     * messageController.removeall()
+     */
+    removeall: function (req, res) {
+        console.log("REMOVE ALL REQ");
+        messageModel.remove({}, function (err, message) {
+            console.log("REMOVE SUCC");
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when deleting the message.',
+                    error: err
+                });
+            }
+
+            return res.status(204).json();
+        });
+    },
+
     getDistance: function (req, res) {
         var distance = req.query.distance;
         var longitude = req.query.lon;

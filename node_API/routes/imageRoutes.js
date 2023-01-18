@@ -16,12 +16,12 @@ router.get('/:id', imageController.show);
 /*
  * POST
  */
-router.post('/', imageController.create);
+// router.post('/', imageController.create);
 
 /*
  * PUT
  */
-router.put('/:id', imageController.update);
+// router.put('/:id', imageController.update);
 
 /*
  * DELETE
